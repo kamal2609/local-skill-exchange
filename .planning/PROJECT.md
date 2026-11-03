@@ -52,3 +52,4 @@ Local Skill Exchange is a community-driven, time-banking web platform where neig
 - All credit modifications **must** execute inside an atomic database transaction (`prisma.$transaction`) to prevent double-spending or balance mismatch.
 - Exchange completion **must** verify sufficient balance before transferring credits.
 - Clean, semantic, fully accessible UI with zero build or runtime errors.
+

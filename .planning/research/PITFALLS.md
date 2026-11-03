@@ -24,3 +24,4 @@
 - **Mitigation:**
   - Automatic initial grant: Every verified user starts with 3 welcome credits (`WELCOME_BONUS`).
   - Supports both `TEACH` listings (what you offer) and `LEARN` requests (what you're looking for), allowing matching from either direction.
+

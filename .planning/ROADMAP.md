@@ -60,3 +60,4 @@
 - **Requirements Covered:** `REQ-REVW-01`, `REQ-REVW-02`.
 - **Verification:**
   - Production build (`npm run build`) runs cleanly. Full happy path executed from registration to completed exchange with review.
+

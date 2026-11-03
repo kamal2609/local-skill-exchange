@@ -48,3 +48,4 @@
   - `type`: `WELCOME_BONUS`, `EXCHANGE_PAYMENT`, `ADMIN_ADJUSTMENT`
   - `createdAt`: timestamp
 - **Rule:** Balance calculations and transfers run inside an atomic Prisma transaction (`prisma.$transaction`).
+

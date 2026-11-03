@@ -22,3 +22,4 @@
 - `tailwindcss`, `postcss`, `autoprefixer`, `lucide-react`
 - `@prisma/client`, `prisma`
 - `zod`, `bcryptjs`, `clsx`, `tailwind-merge`
+
