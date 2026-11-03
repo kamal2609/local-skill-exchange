@@ -4,7 +4,11 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 
+// Pre-load all 12 Mongoose models
+require('./models');
+
 const healthRoutes = require('./routes/health');
+const statsRoutes = require('./routes/stats');
 
 const app = express();
 
@@ -41,13 +45,17 @@ if (process.env.NODE_ENV !== 'test') {
 
 // Routes
 app.use('/api/health', healthRoutes);
+app.use('/api/stats', statsRoutes);
 
 // Root API discovery endpoint
 app.get('/api', (req, res) => {
   res.json({
     message: 'Welcome to the Local Skill Exchange REST API (MERN Stack)',
     version: '1.0.0',
-    documentation: '/api/health',
+    endpoints: {
+      health: '/api/health',
+      stats: '/api/stats',
+    },
   });
 });
 

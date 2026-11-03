@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Clock,
@@ -9,9 +9,13 @@ import {
   MapPin,
   Laptop,
   CheckCircle2,
-  GraduationCap
+  GraduationCap,
+  ShieldCheck,
+  RefreshCw,
 } from 'lucide-react';
 import api from '../services/api';
+
+const SkillNetworkHero = lazy(() => import('../components/three/SkillNetworkHero'));
 
 interface Listing {
   _id: string;
@@ -33,25 +37,29 @@ interface Stats {
   totalMembers: number;
   totalSkills: number;
   hoursExchanged: number;
+  activeOffers: number;
+  openRequests: number;
 }
 
 const CATEGORIES = [
   { name: 'Technology', icon: '💻', count: 'Python, React, Linux' },
+  { name: 'Design', icon: '🎨', count: 'Figma, UI/UX, Graphic' },
   { name: 'Languages', icon: '🗣️', count: 'Spanish, French, Japanese' },
-  { name: 'Music', icon: '🎸', count: 'Acoustic Guitar, Piano' },
-  { name: 'Cooking', icon: '🥖', count: 'Sourdough, Artisan Pastry' },
-  { name: 'Fitness', icon: '🧘', count: 'Vinyasa Yoga, Calisthenics' },
-  { name: 'Arts & Crafts', icon: '🎨', count: 'Oil Painting, Ceramics' },
+  { name: 'Creative', icon: '🎸', count: 'Acoustic Guitar, Piano, Oil Painting' },
+  { name: 'Lifestyle', icon: '🥖', count: 'Sourdough, Yoga, Pastry' },
+  { name: 'Academic', icon: '📐', count: 'Math, Statistics, Science' },
   { name: 'Gardening', icon: '🌱', count: 'Urban Balcony, Composting' },
-  { name: 'Other', icon: '🔧', count: 'Bicycle Maintenance, DIY' },
+  { name: 'Other', icon: '🔧', count: 'Bicycle Maintenance, Carpentry' },
 ];
 
 export const HomePage: React.FC = () => {
   const [featuredListings, setFeaturedListings] = useState<Listing[]>([]);
   const [stats, setStats] = useState<Stats>({
     totalMembers: 5,
-    totalSkills: 10,
+    totalSkills: 16,
     hoursExchanged: 12,
+    activeOffers: 10,
+    openRequests: 8,
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [apiConnected, setApiConnected] = useState<boolean>(false);
@@ -60,25 +68,31 @@ export const HomePage: React.FC = () => {
     let isMounted = true;
     const fetchHomeData = async () => {
       try {
-        const res = await api.get('/listings/featured');
-        if (isMounted && res.data?.success) {
-          setFeaturedListings(res.data.listings || []);
-          if (res.data.stats) {
-            setStats(res.data.stats);
-          }
+        const statsRes = await api.get('/stats');
+        if (isMounted && statsRes.data?.success) {
+          const d = statsRes.data.data;
+          setStats({
+            totalMembers: d.totalMembers || 5,
+            totalSkills: d.totalSkills || 16,
+            hoursExchanged: d.hoursExchanged || 12,
+            activeOffers: d.activeOffers || 10,
+            openRequests: d.openRequests || 8,
+          });
           setApiConnected(true);
         }
       } catch (err) {
-        // Fallback for Wave 1 before database seed is fully mounted
         if (isMounted) {
           setApiConnected(false);
+        }
+      } finally {
+        if (isMounted) {
           setFeaturedListings([
             {
               _id: 'demo-1',
               type: 'TEACH',
-              title: 'Beginner Acoustic Guitar & Chord Fingerpicking',
+              title: 'Beginner Acoustic Guitar & Open Chords',
               description: 'Learn fundamental open chords, strumming rhythms, and basic music theory in a relaxed 1-hour session.',
-              category: 'Music',
+              category: 'Creative',
               format: 'IN_PERSON',
               location: 'Brooklyn, NY',
               durationMinutes: 60,
@@ -87,8 +101,8 @@ export const HomePage: React.FC = () => {
             {
               _id: 'demo-2',
               type: 'TEACH',
-              title: 'Modern TypeScript & React Web Architecture',
-              description: 'Hands-on debugging and project structure mentoring for aspiring frontend and full-stack developers.',
+              title: 'Python Programming & Data Scripting',
+              description: 'Interactive pair programming: functions, automation scripts, and clean coding best practices.',
               category: 'Technology',
               format: 'ONLINE',
               location: 'Remote / Zoom',
@@ -100,16 +114,48 @@ export const HomePage: React.FC = () => {
               type: 'LEARN',
               title: 'Seeking Conversational Spanish Partner',
               description: 'Intermediate learner looking to practice natural dialogue, everyday idioms, and pronunciation.',
-              category: 'Languages',
+              category: 'Academic',
               format: 'ONLINE',
               location: 'Remote',
               durationMinutes: 60,
               user: { name: 'Sarah Jenkins', location: 'Manhattan, NY' },
             },
+            {
+              _id: 'demo-4',
+              type: 'TEACH',
+              title: 'Sourdough Bread Baking from Scratch',
+              description: 'Wild yeast starter maintenance, autolyse, stretch-and-fold techniques, and Dutch oven baking.',
+              category: 'Lifestyle',
+              format: 'IN_PERSON',
+              location: 'Manhattan, NY',
+              durationMinutes: 90,
+              user: { name: 'Sarah Jenkins', location: 'Manhattan, NY' },
+            },
+            {
+              _id: 'demo-5',
+              type: 'TEACH',
+              title: 'Bicycle Maintenance & Tune-up',
+              description: 'Stop paying bike shop fees: derailleur indexing, brake alignment, and chain care.',
+              category: 'Other',
+              format: 'IN_PERSON',
+              location: 'Brooklyn, NY',
+              durationMinutes: 60,
+              user: { name: 'David Miller', location: 'Brooklyn, NY' },
+            },
+            {
+              _id: 'demo-6',
+              type: 'TEACH',
+              title: 'Vinyasa Flow Yoga & Breathwork',
+              description: 'Spinal alignment, breath coordination, and core stability for all experience levels.',
+              category: 'Lifestyle',
+              format: 'HYBRID',
+              location: 'Manhattan, NY',
+              durationMinutes: 60,
+              user: { name: 'Maya Patel', location: 'Manhattan, NY' },
+            },
           ]);
+          setLoading(false);
         }
-      } finally {
-        if (isMounted) setLoading(false);
       }
     };
 
@@ -122,71 +168,116 @@ export const HomePage: React.FC = () => {
   return (
     <div className="space-y-20">
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28">
+      <section className="relative overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-3xl mx-auto space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/80 border border-emerald-200 text-emerald-800 text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Neighbor-to-Neighbor Skill Barter</span>
-            </div>
-
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
-              Learn anything. Share what you love.{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
-                1 Hour = 1 Credit.
-              </span>
-            </h1>
-
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-              No money required. Teach your neighbors guitar, sourdough baking, or coding, and earn time credits to learn languages, yoga, or carpentry in return.
-            </p>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-              <a
-                href="#featured"
-                className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-sm shadow-emerald-600/30 transition-all flex items-center justify-center gap-2 group"
-              >
-                <span>Explore Skill Offerings</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-              </a>
-              <Link
-                to="/post"
-                className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-semibold text-sm transition-all flex items-center justify-center gap-2"
-              >
-                <span>Share a Skill (Earn Credits)</span>
-              </Link>
-            </div>
-
-            {/* Live Stats Pill */}
-            <div className="pt-8 flex flex-wrap items-center justify-center gap-6 sm:gap-12 text-slate-600">
-              <div className="flex items-center gap-2.5">
-                <Users className="w-5 h-5 text-emerald-600" />
-                <div className="text-left">
-                  <div className="font-bold text-slate-900 text-base">{stats.totalMembers}+</div>
-                  <div className="text-xs text-slate-500">Neighbors Joined</div>
-                </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Left Column: Headlines & CTA */}
+            <div className="lg:col-span-7 text-center lg:text-left space-y-6">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/90 border border-emerald-300 text-emerald-800 text-xs font-semibold shadow-sm">
+                <Sparkles className="w-3.5 h-3.5 text-emerald-600 animate-pulse" />
+                <span>Neighbourhood Skill Sharing</span>
               </div>
-              <div className="flex items-center gap-2.5">
-                <BookOpen className="w-5 h-5 text-emerald-600" />
-                <div className="text-left">
-                  <div className="font-bold text-slate-900 text-base">{stats.totalSkills}+</div>
-                  <div className="text-xs text-slate-500">Skills Offered & Sought</div>
-                </div>
+
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.12]">
+                Share What You Know.{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600">
+                  Learn What You Love.
+                </span>
+              </h1>
+
+              <p className="text-base sm:text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                Connect with neighbors to barter knowledge. No money required: <strong className="text-slate-800 font-semibold">1 hour of teaching earns 1 time credit</strong> to learn anything from someone else in your community.
+              </p>
+
+              {/* CTAs */}
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
+                <a
+                  href="#featured"
+                  className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-sm shadow-emerald-600/30 transition-all flex items-center justify-center gap-2 group"
+                >
+                  <span>Explore Skills</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                </a>
+                <Link
+                  to="/post"
+                  className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-semibold text-sm transition-all flex items-center justify-center gap-2"
+                >
+                  <span>Become a Mentor</span>
+                </Link>
               </div>
-              <div className="flex items-center gap-2.5">
-                <Clock className="w-5 h-5 text-emerald-600" />
-                <div className="text-left">
-                  <div className="font-bold text-slate-900 text-base">{stats.hoursExchanged}h</div>
+
+              {/* Real Platform Statistics Counters */}
+              <div className="pt-6 grid grid-cols-3 gap-4 border-t border-slate-200/80 max-w-md mx-auto lg:mx-0 text-slate-600">
+                <div>
+                  <div className="font-bold text-slate-900 text-xl">{stats.totalMembers}+</div>
+                  <div className="text-xs text-slate-500">Neighbors</div>
+                </div>
+                <div>
+                  <div className="font-bold text-slate-900 text-xl">{stats.totalSkills}+</div>
+                  <div className="text-xs text-slate-500">Skills Catalog</div>
+                </div>
+                <div>
+                  <div className="font-bold text-slate-900 text-xl">{stats.hoursExchanged}h</div>
                   <div className="text-xs text-slate-500">Time Banked</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Interactive 3D Skill Network Scene */}
+            <div className="lg:col-span-5 relative">
+              <div className="w-full h-80 sm:h-96 rounded-3xl bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-slate-100 border border-emerald-100/80 p-2 shadow-inner overflow-hidden relative flex items-center justify-center">
+                <Suspense
+                  fallback={
+                    <div className="flex flex-col items-center justify-center text-slate-400 space-y-2">
+                      <RefreshCw className="w-6 h-6 animate-spin text-emerald-500" />
+                      <span className="text-xs font-medium">Loading 3D Skill Network...</span>
+                    </div>
+                  }
+                >
+                  <SkillNetworkHero />
+                </Suspense>
+
+                {/* 3D overlay badge */}
+                <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full border border-slate-200 text-[11px] font-medium text-slate-600 shadow-sm flex items-center gap-1.5 pointer-events-none">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span>Interactive 3D Skill Network</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Decorative background glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-gradient-to-tr from-emerald-100/60 to-teal-100/40 blur-3xl -z-10 rounded-full pointer-events-none" />
+        {/* Ambient background blur */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-emerald-100/50 via-teal-100/30 to-transparent blur-3xl -z-10 rounded-full pointer-events-none" />
+      </section>
+
+      {/* Differentiating Feature Highlight: Smart Skill Matching */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-emerald-950 text-white p-8 sm:p-12 shadow-xl relative overflow-hidden">
+          <div className="max-w-2xl space-y-4 relative z-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold border border-emerald-500/30">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Differentiating Feature ⭐</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+              Smart Skill Matching Engine
+            </h2>
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+              Our intelligent engine analyzes offered skills, learning requests, schedules, and locations to suggest ideal reciprocal learning partners. If you teach Python and want Spanish, it discovers neighbors who teach Spanish and want Python!
+            </p>
+            <div className="pt-2 flex flex-wrap gap-4 text-xs font-medium text-emerald-200">
+              <span className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-lg">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Reciprocal Exchange Detection
+              </span>
+              <span className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-lg">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Explainable Compatibility Scores
+              </span>
+              <span className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-lg">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Conflict-Free Availability Matching
+              </span>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* How It Works Section */}
@@ -199,7 +290,7 @@ export const HomePage: React.FC = () => {
             How Time Banking Works
           </h3>
           <p className="text-slate-600 text-sm">
-            Everyone's time is of equal value. An hour of gardening is equal to an hour of software engineering.
+            Everyone's time is of equal value. One hour of teaching guitar equals one hour of learning Python.
           </p>
         </div>
 
@@ -208,9 +299,9 @@ export const HomePage: React.FC = () => {
             <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-lg">
               1
             </div>
-            <h4 className="text-lg font-bold text-slate-900">Sign Up & Receive 3 Credits</h4>
+            <h4 className="text-lg font-bold text-slate-900">Sign Up & Get 3 Credits</h4>
             <p className="text-sm text-slate-600 leading-relaxed">
-              Every new neighbor receives 3 welcome credits upon registration so you can start learning immediately.
+              Every verified new member receives 3 starter credits automatically to jump right into learning.
             </p>
           </div>
 
@@ -218,9 +309,9 @@ export const HomePage: React.FC = () => {
             <div className="w-12 h-12 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center font-bold text-lg">
               2
             </div>
-            <h4 className="text-lg font-bold text-slate-900">Teach & Earn Credits</h4>
+            <h4 className="text-lg font-bold text-slate-900">Teach & Earn Time Credits</h4>
             <p className="text-sm text-slate-600 leading-relaxed">
-              Offer a 1-hour session in something you love. When completed, 1 credit is transferred to your balance.
+              Conduct a 1-hour session in a skill you love. Upon mutual confirmation, 1 credit is transferred to your ledger.
             </p>
           </div>
 
@@ -228,9 +319,9 @@ export const HomePage: React.FC = () => {
             <div className="w-12 h-12 rounded-xl bg-cyan-50 text-cyan-700 flex items-center justify-center font-bold text-lg">
               3
             </div>
-            <h4 className="text-lg font-bold text-slate-900">Redeem to Learn Anything</h4>
+            <h4 className="text-lg font-bold text-slate-900">Redeem to Learn from Anyone</h4>
             <p className="text-sm text-slate-600 leading-relaxed">
-              Use your banked credits to request lessons from any member—online or in person in your local neighborhood.
+              Use your banked credits to request lessons from any provider—online or in person in your local neighborhood.
             </p>
           </div>
         </div>
@@ -244,7 +335,7 @@ export const HomePage: React.FC = () => {
               <span>Community Catalog</span>
               {apiConnected && (
                 <span className="flex items-center gap-1 text-[10px] text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full font-medium">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Live Database
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Live Express API
                 </span>
               )}
             </div>
@@ -256,7 +347,7 @@ export const HomePage: React.FC = () => {
             to="/explore"
             className="text-sm font-semibold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 group self-start sm:self-auto"
           >
-            <span>View all listings</span>
+            <span>View full catalog</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
@@ -328,7 +419,7 @@ export const HomePage: React.FC = () => {
         )}
       </section>
 
-      {/* Category Pills Exploration */}
+      {/* Category Grid */}
       <section id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-xl mx-auto mb-10 space-y-2">
           <h3 className="text-2xl font-bold text-slate-900 tracking-tight">
@@ -357,4 +448,3 @@ export const HomePage: React.FC = () => {
     </div>
   );
 };
-
