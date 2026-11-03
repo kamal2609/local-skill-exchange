@@ -121,3 +121,4 @@ model Review {
 - Windows path separators in Prisma SQLite paths (`file:./dev.db`).
 - Ensuring Next.js 15 uses App Router conventions with proper TypeScript definitions.
 - Running `prisma db push` to initialize SQLite file smoothly.
+
