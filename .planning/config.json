@@ -1,0 +1,12 @@
+{
+  "mode": "discuss",
+  "workflow": {
+    "research_before_questions": false,
+    "compact_content": false
+  },
+  "models": {
+    "researcher": "inherit",
+    "planner": "inherit",
+    "executor": "inherit"
+  }
+}
