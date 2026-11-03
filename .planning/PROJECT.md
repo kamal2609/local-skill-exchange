@@ -16,7 +16,7 @@ Local Skill Exchange is a community-driven, time-banking web platform where neig
    - User profile setup with location/city, bio, avatar, and credit balance.
 2. **Skill Listings Management:**
    - Dual listing types: `TEACH` (Offering skills) and `LEARN` (Requesting lessons).
-   - Rich categorization (Tech, Languages, Arts & Crafts, Music, Cooking, Fitness, Home & Gardening).
+   - Rich categorization (Technology, Languages, Arts & Crafts, Music, Cooking, Fitness, Gardening, Other).
    - Detail fields: Experience level, preferred format (Online/In-person), location, and standard session duration.
 3. **Discovery & Search:**
    - Filterable catalog of skill offers and requests.
@@ -37,19 +37,19 @@ Local Skill Exchange is a community-driven, time-banking web platform where neig
 ### Out of Scope (Deferred to v2)
 - Real-time in-app WebRTC video calling (users exchange Google Meet/Zoom links or meet in person).
 - Fiat money payment gateway (strict time banking barter only).
-- Native iOS/Android app (mobile-responsive web app in v1).
+- Native iOS/Android app (mobile-responsive React web app in v1).
 - Automated Google Calendar 2-way synchronization.
 - Complex dispute mediation arbitration council.
 
-## 4. Tech Stack & Architecture
-- **Framework:** Next.js (App Router, React 19, TypeScript)
-- **Styling:** Tailwind CSS, Lucide React icons
-- **Data Layer:** Prisma ORM with SQLite (zero-config, high developer velocity, SQLite file committable/reproducible)
-- **State & Validation:** Zod schemas for input validation; React Server Actions for mutations
-- **Security:** Bcrypt password hashing, HTTP-only secure session cookies
+## 4. Tech Stack & Architecture (MERN Stack)
+- **Database:** MongoDB with Mongoose ODM (document schema, indexes, and transactional consistency)
+- **Backend API:** Node.js + Express.js (REST API, CORS, centralized error handling, JWT auth)
+- **Frontend SPA:** React.js with Vite (fast HMR, component architecture, React Router v6)
+- **Styling & UI:** Tailwind CSS, Lucide React icons
+- **State & Communication:** React Context (AuthContext & CreditContext), Axios API client
+- **Security:** Bcryptjs password hashing, JWT authentication tokens
 
 ## 5. Non-Negotiable Requirements
-- All credit modifications **must** execute inside an atomic database transaction (`prisma.$transaction`) to prevent double-spending or balance mismatch.
+- All credit modifications **must** execute inside atomic database transactions (`session.startTransaction()` or transactional consistency checks) to prevent double-spending or balance mismatch.
 - Exchange completion **must** verify sufficient balance before transferring credits.
 - Clean, semantic, fully accessible UI with zero build or runtime errors.
-

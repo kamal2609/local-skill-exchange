@@ -1,124 +1,145 @@
-# Phase 1 Research: Foundation & Database Layer
+# Phase 1 Research: MERN Stack Foundation & Database Layer
 
 ## 1. Objectives & Deliverables
-Set up a robust, scalable, modern Next.js 15+ App Router application with TypeScript, Tailwind CSS, Lucide icons, and Prisma ORM backed by SQLite. Ensure the schema supports the full time-banking credit lifecycle, dual-direction skill listings (`TEACH` and `LEARN`), atomic credit transfers, and peer reviews.
+Establish a production-ready, clean MERN stack architecture for Local Skill Exchange:
+1. **Server (`server/`):** Node.js + Express.js REST API with Mongoose ODM connected to MongoDB.
+2. **Client (`client/`):** React.js + Vite SPA with Tailwind CSS, Lucide icons, and React Router DOM.
+3. **Database Layer:** Full Mongoose schemas (`User`, `SkillListing`, `ExchangeRequest`, `CreditTransaction`, `Review`).
+4. **Seed Pipeline:** Comprehensive seed script populating 5 diverse demo users, 10+ listings (both `TEACH` and `LEARN`), welcome credit bonus logs, and a sample completed exchange.
+5. **Base Layout & Connectivity:** Responsive navigation with real-time credit badge, footer, and landing page consuming the live Express health & featured listings API.
 
-## 2. Technical Stack & Dependencies
-- **Core Framework:** Next.js (App Router), React 19, TypeScript
-- **Styling:** Tailwind CSS with `@tailwindcss/postcss` or Tailwind v3/v4 setup, Lucide React icons
-- **Database & ORM:** Prisma ORM (`@prisma/client`, `prisma`) with SQLite (`file:./dev.db`)
-- **Utilities & Helpers:** `clsx`, `tailwind-merge`, `bcryptjs` (for hashed passwords in seed/auth), `tsx` (for executing TypeScript seed scripts)
-
-## 3. Schema Architecture
-```prisma
-datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
-}
-
-model User {
-  id              String             @id @default(cuid())
-  name            String
-  email           String             @unique
-  passwordHash    String
-  avatarUrl       String?
-  bio             String?
-  location        String?
-  creditsBalance  Float              @default(3.0)
-  createdAt       DateTime           @default(now())
-  updatedAt       DateTime           @updatedAt
-
-  listings        SkillListing[]
-  sentRequests    ExchangeRequest[]  @relation("Requester")
-  receivedRequests ExchangeRequest[] @relation("Provider")
-  sentCredits     CreditTransaction[] @relation("Sender")
-  receivedCredits CreditTransaction[] @relation("Receiver")
-  writtenReviews  Review[]           @relation("ReviewAuthor")
-  receivedReviews Review[]           @relation("ReviewReceiver")
-}
-
-model SkillListing {
-  id              String            @id @default(cuid())
-  userId          String
-  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type            String            // "TEACH" | "LEARN"
-  title           String
-  description     String
-  category        String            // "Technology", "Music", "Languages", "Arts & Crafts", "Cooking", "Fitness", "Gardening"
-  experienceLevel String            // "BEGINNER", "INTERMEDIATE", "ADVANCED", "ALL_LEVELS"
-  format          String            // "ONLINE", "IN_PERSON", "HYBRID"
-  location        String?           // e.g. "Brooklyn, NY" or "Remote / Zoom"
-  durationMinutes Int               @default(60)
-  status          String            @default("ACTIVE") // "ACTIVE", "PAUSED", "ARCHIVED"
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-
-  requests        ExchangeRequest[]
-}
-
-model ExchangeRequest {
-  id                    String       @id @default(cuid())
-  listingId             String
-  listing               SkillListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
-  requesterId           String
-  requester             User         @relation("Requester", fields: [requesterId], references: [id], onDelete: Cascade)
-  providerId            String
-  provider              User         @relation("Provider", fields: [providerId], references: [id], onDelete: Cascade)
-  proposedDurationHours Float        @default(1.0)
-  creditCost            Float        @default(1.0)
-  status                String       @default("PENDING") // "PENDING", "ACCEPTED", "DECLINED", "CANCELLED", "COMPLETED"
-  notes                 String?
-  scheduledDate         DateTime?
-  createdAt             DateTime     @default(now())
-  updatedAt             DateTime     @updatedAt
-
-  transaction           CreditTransaction?
-  review                Review?
-}
-
-model CreditTransaction {
-  id          String           @id @default(cuid())
-  senderId    String?
-  sender      User?            @relation("Sender", fields: [senderId], references: [id], onDelete: SetNull)
-  receiverId  String
-  receiver    User             @relation("Receiver", fields: [receiverId], references: [id], onDelete: Cascade)
-  amount      Float
-  type        String           // "WELCOME_BONUS", "EXCHANGE_PAYMENT", "ADMIN_ADJUSTMENT"
-  exchangeId  String?          @unique
-  exchange    ExchangeRequest? @relation(fields: [exchangeId], references: [id], onDelete: SetNull)
-  createdAt   DateTime         @default(now())
-}
-
-model Review {
-  id          String          @id @default(cuid())
-  exchangeId  String          @unique
-  exchange    ExchangeRequest @relation(fields: [exchangeId], references: [id], onDelete: Cascade)
-  authorId    String
-  author      User            @relation("ReviewAuthor", fields: [authorId], references: [id], onDelete: Cascade)
-  receiverId  String
-  receiver    User            @relation("ReviewReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
-  rating      Int             // 1 to 5
-  comment     String?
-  createdAt   DateTime        @default(now())
-}
+## 2. Directory Layout
+```text
+Local Skill Exchange/
+├── client/                     # React + Vite Client
+│   ├── public/
+│   ├── src/
+│   │   ├── components/         # Navbar, Footer, FeaturedBanner, ListingCard
+│   │   ├── context/            # AuthContext, CreditContext
+│   │   ├── pages/              # HomePage
+│   │   ├── services/           # api.ts (Axios client)
+│   │   ├── App.tsx
+│   │   ├── main.tsx
+│   │   └── index.css
+│   ├── index.html
+│   ├── vite.config.ts
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+│   └── package.json
+├── server/                     # Node.js + Express + MongoDB Server
+│   ├── src/
+│   │   ├── config/             # db.js
+│   │   ├── models/             # User.js, SkillListing.js, ExchangeRequest.js, CreditTransaction.js, Review.js
+│   │   ├── routes/             # api.js
+│   │   ├── controllers/        # healthController.js, listingsController.js
+│   │   ├── seed/               # seed.js
+│   │   └── app.js, index.js
+│   ├── .env
+│   └── package.json
+├── package.json                # Root package.json
+└── .planning/                  # GSD planning directory
 ```
 
-## 4. Seed Data Strategy
-- Create 5 community members with diverse skill sets:
-  - Elena Rostova (Music & Arts teacher, offers Acoustic Guitar & Painting, wants Web Dev)
-  - Marcus Chen (Full-stack developer, offers Python & React, wants Conversational Spanish)
-  - Sarah Jenkins (Culinary enthusiast, offers Sourdough & Artisan Pastry, wants Urban Gardening)
-  - David Miller (Mechanic & DIY pro, offers Bicycle Repair & Home Carpentry, wants Yoga)
-  - Maya Patel (Polyglot & Yoga instructor, offers Spanish & Vinyasa Yoga, wants French)
-- Seed 10 realistic skill listings across categories.
-- Seed welcome credit transactions (3.0 credits each) and 1 completed exchange demo.
+## 3. Mongoose Schemas Specification
 
-## 5. Potential Gotchas & Verification Steps
-- Windows path separators in Prisma SQLite paths (`file:./dev.db`).
-- Ensuring Next.js 15 uses App Router conventions with proper TypeScript definitions.
-- Running `prisma db push` to initialize SQLite file smoothly.
+### 3.1 User Schema
+```javascript
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true, trim: true },
+  email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+  passwordHash: { type: String, required: true },
+  avatarUrl: { type: String, default: null },
+  bio: { type: String, default: '' },
+  location: { type: String, default: 'Local Community' },
+  creditsBalance: { type: Number, default: 3.0 }, // 3 starter credits
+}, { timestamps: true });
+```
 
+### 3.2 SkillListing Schema
+```javascript
+const skillListingSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
+  type: { type: String, enum: ['TEACH', 'LEARN'], required: true, index: true },
+  title: { type: String, required: true, trim: true },
+  description: { type: String, required: true },
+  category: {
+    type: String,
+    enum: ['Technology', 'Music', 'Languages', 'Arts & Crafts', 'Cooking', 'Fitness', 'Gardening', 'Other'],
+    required: true,
+    index: true
+  },
+  experienceLevel: {
+    type: String,
+    enum: ['BEGINNER', 'INTERMEDIATE', 'ADVANCED', 'ALL_LEVELS'],
+    default: 'ALL_LEVELS'
+  },
+  format: {
+    type: String,
+    enum: ['ONLINE', 'IN_PERSON', 'HYBRID'],
+    default: 'ONLINE'
+  },
+  location: { type: String, default: '' },
+  durationMinutes: { type: Number, default: 60 },
+  status: { type: String, enum: ['ACTIVE', 'PAUSED', 'ARCHIVED'], default: 'ACTIVE', index: true }
+}, { timestamps: true });
+```
+
+### 3.3 ExchangeRequest Schema
+```javascript
+const exchangeRequestSchema = new mongoose.Schema({
+  listingId: { type: mongoose.Schema.Types.ObjectId, ref: 'SkillListing', required: true, index: true },
+  requesterId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
+  providerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
+  proposedDurationHours: { type: Number, default: 1.0 },
+  creditCost: { type: Number, default: 1.0 },
+  status: {
+    type: String,
+    enum: ['PENDING', 'ACCEPTED', 'DECLINED', 'CANCELLED', 'COMPLETED'],
+    default: 'PENDING',
+    index: true
+  },
+  notes: { type: String, default: '' },
+  scheduledDate: { type: Date, default: null }
+}, { timestamps: true });
+```
+
+### 3.4 CreditTransaction Schema
+```javascript
+const creditTransactionSchema = new mongoose.Schema({
+  senderId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
+  receiverId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
+  amount: { type: Number, required: true },
+  type: {
+    type: String,
+    enum: ['WELCOME_BONUS', 'EXCHANGE_PAYMENT', 'ADMIN_ADJUSTMENT'],
+    required: true
+  },
+  exchangeId: { type: mongoose.Schema.Types.ObjectId, ref: 'ExchangeRequest', default: null }
+}, { timestamps: true });
+```
+
+### 3.5 Review Schema
+```javascript
+const reviewSchema = new mongoose.Schema({
+  exchangeId: { type: mongoose.Schema.Types.ObjectId, ref: 'ExchangeRequest', required: true, unique: true },
+  authorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  receiverId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
+  rating: { type: Number, min: 1, max: 5, required: true },
+  comment: { type: String, default: '' }
+}, { timestamps: true });
+```
+
+## 4. Local Database Connection & Zero-Friction Setup
+- MongoDB connection URL via `process.env.MONGODB_URI` (defaults to `mongodb://127.0.0.1:27017/local_skill_exchange`).
+- Memory/Fallback resilience: If a local MongoDB instance is running, it connects automatically. For environments without a running local MongoDB daemon during quick testing, `mongodb-memory-server` can be included in development dependencies to ensure zero-blocker automated testing and demonstrations.
+
+## 5. Seed Dataset
+- 5 diverse personas:
+  - **Elena Rostova:** Teaches Acoustic Guitar & Classical Piano, wants Web Development.
+  - **Marcus Chen:** Teaches Python & TypeScript/React, wants Conversational Spanish.
+  - **Sarah Jenkins:** Teaches Sourdough Baking & Pastry, wants Urban Gardening.
+  - **David Miller:** Teaches Bicycle Maintenance & Carpentry, wants Vinyasa Yoga.
+  - **Maya Patel:** Teaches Conversational Spanish & Yoga, wants French.
+- 10 listings (combination of TEACH offers and LEARN requests).
+- Welcome bonus transactions (3.0 credits for each user).
+- 1 completed sample exchange with a 5-star review.

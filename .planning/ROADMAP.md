@@ -1,35 +1,39 @@
-# Project Roadmap
+# Project Roadmap (MERN Stack)
 
-## Phase 1: Foundation & Database Layer
-- **Goal:** Set up the full Next.js project with TypeScript, Tailwind CSS, Lucide icons, Prisma ORM with SQLite, seed data, and core layout components.
+## Phase 1: MERN Stack Foundation & Database Layer
+- **Goal:** Establish the complete MERN stack foundation: Node.js/Express API server, MongoDB connection with Mongoose schemas, React.js + Vite frontend with Tailwind CSS, comprehensive database seed data, and base responsive layout.
 - **Deliverables:**
-  - Initialized Next.js 15+ App Router application with Tailwind CSS configuration.
-  - Complete Prisma schema (`User`, `SkillListing`, `ExchangeRequest`, `CreditTransaction`, `Review`).
-  - Database migration applied (`prisma migrate dev` or `prisma db push`).
-  - Comprehensive seed script with mock users, skills (Teach & Learn), and initial credit transactions.
-  - Base responsive layout: Navbar with balance pill, footer, toast notifications container.
+  - Root workspace setup orchestrating `client/` and `server/`.
+  - Node.js + Express backend with MongoDB connection via Mongoose.
+  - Complete Mongoose schemas: `User`, `SkillListing`, `ExchangeRequest`, `CreditTransaction`, `Review`.
+  - Comprehensive seed script (`server/src/seed/seed.js`) populating realistic demo users, skills (Teach & Learn), and initial credit transactions.
+  - React.js + Vite frontend configured with Tailwind CSS, Lucide icons, and React Router DOM.
+  - Base responsive layout: Navbar with brand logo and credit balance pill, Footer with community ethos, and Landing page connected to backend health/featured API.
 - **Verification:**
-  - `npm run build` succeeds without TypeScript or ESLint errors.
-  - Database contains valid seeded records.
-  - Home page displays layout and hero section.
+  - Express server starts and connects to MongoDB without connection errors.
+  - Seed script successfully populates MongoDB with users, skills, and ledger entries.
+  - React/Vite client builds cleanly (`npm run build`) without errors.
+  - Landing page loads and renders live statistics and featured skills fetched from the Express API.
 
-## Phase 2: Authentication & User Profiles
-- **Goal:** Deliver user authentication, session cookies, welcome credit allocation, and profile views.
+## Phase 2: Authentication & User Profiles (MERN)
+- **Goal:** Deliver user authentication, JWT session management, welcome credit allocation, and profile views.
 - **Deliverables:**
-  - Registration form with validation (Name, Email, Password, Bio, Location).
-  - Login / Logout actions with HTTP-only cookie session management.
-  - Automatic 3-credit welcome bonus allocation upon registration with ledger entry.
-  - User Profile view & Edit Profile page.
+  - Express authentication endpoints: `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me`.
+  - Automatic 3-credit welcome bonus allocation upon registration with MongoDB ledger entry.
+  - React `AuthContext` for global session state and token persistence.
+  - Registration and Login views with validation.
+  - User Profile view & Edit Profile page with bio, city/location, and avatar.
   - Real-time balance badge in navigation reflecting actual database balance.
 - **Requirements Covered:** `REQ-AUTH-01`, `REQ-AUTH-02`, `REQ-AUTH-03`, `REQ-AUTH-04`, `REQ-AUTH-05`.
 - **Verification:**
-  - New user registers -> receives 3 credits in header -> ledger record created.
-  - Log out and log in with persisted session.
+  - New user registers -> receives 3 credits in header -> ledger record created in MongoDB.
+  - Log out and log in with persisted JWT token.
 
-## Phase 3: Skill Listings & Discovery Engine
+## Phase 3: Skill Listings & Discovery Engine (MERN)
 - **Goal:** Allow users to post skill offers (`TEACH`) and requests (`LEARN`), browse, and filter listings.
 - **Deliverables:**
-  - "Post a Skill" modal / page with form validation (Type, Title, Category, Format, Experience Level, Description).
+  - Express CRUD endpoints for `/api/listings` with category, format, and search query filters.
+  - "Post a Skill" modal/form in React with validation (Type, Title, Category, Format, Experience Level, Description).
   - Discovery Catalog page with tabbed view (Teach / Learn), category filter pills, and search query bar.
   - Detailed Skill Listing page displaying teacher info, description, location, and "Request Exchange" CTA.
   - My Listings dashboard management (edit/archive listings).
@@ -37,27 +41,28 @@
 - **Verification:**
   - User can publish a listing and see it appear immediately in search & filters.
 
-## Phase 4: Exchange Workflow & Atomic Credit Ledger
+## Phase 4: Exchange Workflow & Atomic Credit Ledger (MERN)
 - **Goal:** Complete the end-to-end skill exchange request, acceptance, confirmation, and credit transfer cycle.
 - **Deliverables:**
-  - "Request Exchange" flow with duration selection and balance sufficiency pre-check.
+  - Express exchange endpoints: `POST /api/exchanges`, `GET /api/exchanges`, `PUT /api/exchanges/:id/status`, `POST /api/exchanges/:id/confirm`.
+  - Atomic MongoDB transactions (`session.withTransaction`) for credit transfer: debits learner, credits teacher, appends `CreditTransaction`.
+  - "Request Exchange" modal in React with duration selection and balance sufficiency pre-check.
   - Exchange Management Dashboard: "Incoming Requests" and "My Requests" tabs.
   - Provider actions: `ACCEPT` or `DECLINE`.
   - Requester actions: `CANCEL` (while pending) and `CONFIRM_COMPLETION` (after session).
-  - Atomic database transaction for credit transfer: debits learner, credits teacher, appends `CreditTransaction`.
   - Transaction History ledger view showing date, counterparty, amount, and reason.
 - **Requirements Covered:** `REQ-EXCH-01`, `REQ-EXCH-02`, `REQ-EXCH-03`, `REQ-EXCH-04`, `REQ-EXCH-05`, `REQ-EXCH-06`, `REQ-LEDG-01`, `REQ-LEDG-02`, `REQ-LEDG-03`.
 - **Verification:**
-  - User A requests 1-hour session from User B -> User B accepts -> User A confirms completion -> 1 credit transferred from A to B atomically.
+  - User A requests 1-hour session from User B -> User B accepts -> User A confirms completion -> 1 credit transferred from A to B atomically in MongoDB.
 
-## Phase 5: Reviews, Ratings & Final Polish
+## Phase 5: Reviews, Ratings & Final Polish (MERN)
 - **Goal:** Implement post-exchange feedback, aggregate rating badges, UI polish, and end-to-end audit.
 - **Deliverables:**
+  - Express endpoints for reviews: `POST /api/reviews`, `GET /api/reviews/user/:userId`.
   - Review modal triggered upon exchange completion (1-5 stars + written review).
   - Aggregate rating calculation displayed on user profiles and skill listing cards.
   - Empty states, loading skeletons, responsive mobile navigation, and community guidelines modal.
   - End-to-end smoke test verifying clean build and complete user flow.
 - **Requirements Covered:** `REQ-REVW-01`, `REQ-REVW-02`.
 - **Verification:**
-  - Production build (`npm run build`) runs cleanly. Full happy path executed from registration to completed exchange with review.
-
+  - Full happy path executed from registration to completed exchange with review across client and server.
