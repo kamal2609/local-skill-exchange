@@ -1,68 +1,89 @@
-# Project Roadmap (MERN Stack)
+# Master Project Roadmap — Local Skill Exchange (9 Phases)
 
-## Phase 1: MERN Stack Foundation & Database Layer
-- **Goal:** Establish the complete MERN stack foundation: Node.js/Express API server, MongoDB connection with Mongoose schemas, React.js + Vite frontend with Tailwind CSS, comprehensive database seed data, and base responsive layout.
+## Phase 1: MERN Foundation & Database Setup
+- **Goal:** Establish clean monorepo architecture (`frontend/` and `backend/`), connect Express to MongoDB, implement all 12 Mongoose schemas, execute comprehensive seeding, and build base layout with landing page.
 - **Deliverables:**
-  - Root workspace setup orchestrating `client/` and `server/`.
-  - Node.js + Express backend with MongoDB connection via Mongoose.
-  - Complete Mongoose schemas: `User`, `SkillListing`, `ExchangeRequest`, `CreditTransaction`, `Review`.
-  - Comprehensive seed script (`server/src/seed/seed.js`) populating realistic demo users, skills (Teach & Learn), and initial credit transactions.
-  - React.js + Vite frontend configured with Tailwind CSS, Lucide icons, and React Router DOM.
-  - Base responsive layout: Navbar with brand logo and credit balance pill, Footer with community ethos, and Landing page connected to backend health/featured API.
-- **Verification:**
-  - Express server starts and connects to MongoDB without connection errors.
-  - Seed script successfully populates MongoDB with users, skills, and ledger entries.
-  - React/Vite client builds cleanly (`npm run build`) without errors.
-  - Landing page loads and renders live statistics and featured skills fetched from the Express API.
+  - Standard monorepo layout: `frontend/` (React + Vite + TypeScript) and `backend/` (Node + Express + MongoDB).
+  - All 12 Mongoose models: `User`, `Skill`, `SkillOffer`, `LearningRequest`, `Availability`, `Session`, `CreditTransaction`, `Review`, `Conversation`, `Message`, `Notification`, `Report`.
+  - Comprehensive seed script (`backend/src/seed/seed.js`) generating realistic demo users (including admin), skills across categories, offers, requests, availability slots, and ledger history.
+  - Express API foundation: CORS, Helmet, JSON body parsing, Morgan logging, central error handler, and `/api/health`.
+  - Base responsive layout: Navbar with credit balance badge, Footer with community ethos, and Landing page consuming live backend statistics.
+- **Verification Gates:**
+  - Backend starts and connects to MongoDB without error.
+  - Database seed populates all 12 collections with valid records.
+  - Frontend builds cleanly (`npm run build --prefix frontend`) with zero TypeScript or styling errors.
+  - Landing page loads and displays live counters from Express backend.
 
-## Phase 2: Authentication & User Profiles (MERN)
-- **Goal:** Deliver user authentication, JWT session management, welcome credit allocation, and profile views.
+## Phase 2: Authentication & User Profiles
+- **Goal:** Deliver secure user authentication, JWT session management, RBAC, profile management, and password reset.
 - **Deliverables:**
-  - Express authentication endpoints: `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me`.
-  - Automatic 3-credit welcome bonus allocation upon registration with MongoDB ledger entry.
-  - React `AuthContext` for global session state and token persistence.
-  - Registration and Login views with validation.
-  - User Profile view & Edit Profile page with bio, city/location, and avatar.
-  - Real-time balance badge in navigation reflecting actual database balance.
-- **Requirements Covered:** `REQ-AUTH-01`, `REQ-AUTH-02`, `REQ-AUTH-03`, `REQ-AUTH-04`, `REQ-AUTH-05`.
-- **Verification:**
-  - New user registers -> receives 3 credits in header -> ledger record created in MongoDB.
-  - Log out and log in with persisted JWT token.
+  - Express endpoints: `POST /api/auth/register`, `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/me`, `POST /api/auth/forgot-password`, `POST /api/auth/reset-password`.
+  - Role-based authorization middleware enforcing `LEARNER`, `PROVIDER`, and `ADMIN` access.
+  - Automated 3-credit welcome bonus grant upon registration with ledger entry.
+  - Frontend `AuthContext` with JWT persistence, login/registration forms with Zod validation.
+  - User profile view and edit screens (skills offered, skills wanted, bio, avatar, location).
+- **Verification Gates:** User registration creates user + welcome credit; JWT routes protect resources; role permissions work as intended.
 
-## Phase 3: Skill Listings & Discovery Engine (MERN)
-- **Goal:** Allow users to post skill offers (`TEACH`) and requests (`LEARN`), browse, and filter listings.
+## Phase 3: Skills, Offers & Learning Requests
+- **Goal:** Implement the full skill catalog taxonomy, independent skill offer publishing, and learning request publishing.
 - **Deliverables:**
-  - Express CRUD endpoints for `/api/listings` with category, format, and search query filters.
-  - "Post a Skill" modal/form in React with validation (Type, Title, Category, Format, Experience Level, Description).
-  - Discovery Catalog page with tabbed view (Teach / Learn), category filter pills, and search query bar.
-  - Detailed Skill Listing page displaying teacher info, description, location, and "Request Exchange" CTA.
-  - My Listings dashboard management (edit/archive listings).
-- **Requirements Covered:** `REQ-SKILL-01`, `REQ-SKILL-02`, `REQ-SKILL-03`, `REQ-SKILL-04`, `REQ-DISC-01`, `REQ-DISC-02`, `REQ-DISC-03`.
-- **Verification:**
-  - User can publish a listing and see it appear immediately in search & filters.
+  - Standalone Skill Catalog CRUD endpoints and taxonomy filters.
+  - Skill Offers management: providers publish, edit, pause, and delete teaching offers.
+  - Learning Requests management: learners publish requests with status lifecycle (`OPEN` to `COMPLETED`).
+  - Discovery Catalog page with tabbed views (Offers vs Requests), category pills, difficulty filters, and search.
+- **Verification Gates:** Users can publish offers and requests, search across titles and categories, and see them appear immediately.
 
-## Phase 4: Exchange Workflow & Atomic Credit Ledger (MERN)
-- **Goal:** Complete the end-to-end skill exchange request, acceptance, confirmation, and credit transfer cycle.
+## Phase 4: Smart Skill Matching Engine ⭐ (Differentiating Feature)
+- **Goal:** Build the intelligent, explainable matching engine that suggests compatible learning partnerships.
 - **Deliverables:**
-  - Express exchange endpoints: `POST /api/exchanges`, `GET /api/exchanges`, `PUT /api/exchanges/:id/status`, `POST /api/exchanges/:id/confirm`.
-  - Atomic MongoDB transactions (`session.withTransaction`) for credit transfer: debits learner, credits teacher, appends `CreditTransaction`.
-  - "Request Exchange" modal in React with duration selection and balance sufficiency pre-check.
-  - Exchange Management Dashboard: "Incoming Requests" and "My Requests" tabs.
-  - Provider actions: `ACCEPT` or `DECLINE`.
-  - Requester actions: `CANCEL` (while pending) and `CONFIRM_COMPLETION` (after session).
-  - Transaction History ledger view showing date, counterparty, amount, and reason.
-- **Requirements Covered:** `REQ-EXCH-01`, `REQ-EXCH-02`, `REQ-EXCH-03`, `REQ-EXCH-04`, `REQ-EXCH-05`, `REQ-EXCH-06`, `REQ-LEDG-01`, `REQ-LEDG-02`, `REQ-LEDG-03`.
-- **Verification:**
-  - User A requests 1-hour session from User B -> User B accepts -> User A confirms completion -> 1 credit transferred from A to B atomically in MongoDB.
+  - Matching algorithm service calculating weighted compatibility (Skill: 40%, Reciprocal: 25%, Availability: 15%, Experience: 10%, Location: 5%, Language: 5%).
+  - Reciprocal exchange detector (User A teaches what User B wants AND User B teaches what User A wants).
+  - Match explanation generator providing clear rationale for every match.
+  - Smart Matches dashboard view displaying ranked compatible partners with match score percentages and direct "Request Session" CTAs.
+- **Verification Gates:** Matching service accurately identifies reciprocal and one-way matches with mathematical precision and clear explanations using real database records.
 
-## Phase 5: Reviews, Ratings & Final Polish (MERN)
-- **Goal:** Implement post-exchange feedback, aggregate rating badges, UI polish, and end-to-end audit.
+## Phase 5: Availability Management & Session Booking
+- **Goal:** Implement weekly recurring availability schedules, session booking, and dual-confirmation completion flow.
 - **Deliverables:**
-  - Express endpoints for reviews: `POST /api/reviews`, `GET /api/reviews/user/:userId`.
-  - Review modal triggered upon exchange completion (1-5 stars + written review).
-  - Aggregate rating calculation displayed on user profiles and skill listing cards.
-  - Empty states, loading skeletons, responsive mobile navigation, and community guidelines modal.
-  - End-to-end smoke test verifying clean build and complete user flow.
-- **Requirements Covered:** `REQ-REVW-01`, `REQ-REVW-02`.
-- **Verification:**
-  - Full happy path executed from registration to completed exchange with review across client and server.
+  - Availability scheduler: users configure weekly days, hours, timezone, and learning format.
+  - Booking engine: learners select available slots and send booking requests.
+  - Conflict prevention: validation prevents overlapping sessions for both provider and learner.
+  - Session lifecycle: `REQUESTED` → `ACCEPTED` / `REJECTED` → `SCHEDULED` → `IN_PROGRESS` → `COMPLETED`.
+  - Mutual/learner confirmation flow triggering credit release.
+- **Verification Gates:** Booking prevents double-booking; session state transitions cleanly; confirmation updates session status.
+
+## Phase 6: Time-Banking Credit System & Ledger
+- **Goal:** Ensure bulletproof, atomic time-banking accounting (1 hour = 1 credit).
+- **Deliverables:**
+  - Multi-document MongoDB transactions (`session.withTransaction`) executing atomic debit/credit operations.
+  - Transaction types: `SESSION_EARN`, `SESSION_SPEND`, `SESSION_REFUND`, `WELCOME_BONUS`, `ADMIN_ADJUSTMENT`.
+  - Safeguards preventing negative balances or duplicate credit awards.
+  - Transaction History ledger page displaying date, counterparty, amount, and reference.
+- **Verification Gates:** Completed sessions transfer credits atomically; insufficient balances reject bookings; ledger audit log is complete.
+
+## Phase 7: Communication & Community
+- **Goal:** Deliver in-app communication, real-time alerts, peer reviews, and safety reporting.
+- **Deliverables:**
+  - Direct messaging between matched users with conversation threads.
+  - Notification center with unread counters for bookings, matches, and credits.
+  - Post-session review modal (1 to 5 stars + written feedback) with aggregate rating calculation.
+  - Report submission system for trust and safety moderation.
+- **Verification Gates:** Users can message counterparties; reviews update user ratings; reports are queued for admin review.
+
+## Phase 8: Premium UI, 3D Visuals & Admin Dashboard
+- **Goal:** Deliver a modern, visually stunning experience with 3D components and comprehensive administrative controls.
+- **Deliverables:**
+  - Interactive 3D skill network hero using Three.js, React Three Fiber, and Drei.
+  - Framer Motion page transitions, card hover physics, and modal animations.
+  - Administrator Dashboard: platform metrics (users, skills, sessions, credit circulation), user management, category management, report resolution.
+  - Full completion of the 20 application page views.
+- **Verification Gates:** 3D hero renders smoothly with mobile fallbacks; admin dashboard displays real database aggregates; all 20 views are functional.
+
+## Phase 9: Testing, Security Audit & Deployment
+- **Goal:** Verify production quality through automated testing, security hardening, full documentation, and cloud deployment setup.
+- **Deliverables:**
+  - Automated tests: Unit tests (Vitest), API integration tests (Supertest), and E2E browser tests (Playwright).
+  - Security hardening: Helmet headers, rate limiting, MongoDB sanitization, and CORS enforcement.
+  - Documentation suite: `README.md`, `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/API.md`, `docs/TESTING.md`, `docs/USER_GUIDE.md`.
+  - Deployment configuration for MongoDB Atlas, Render/Railway (backend), and Vercel (frontend).
+- **Verification Gates:** All automated tests pass; security audit is clean; production builds succeed.

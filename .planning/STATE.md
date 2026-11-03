@@ -1,26 +1,32 @@
-# Project Memory & Current State
+# Project Memory & Current State — Local Skill Exchange
 
 ## Overview
 - **Project:** Local Skill Exchange
-- **Core Model:** Equal-value time-banking credit system (1 hour taught = 1 credit earned to learn)
-- **Tech Stack:** MERN Stack (MongoDB, Express.js, React.js with Vite, Node.js) + Tailwind CSS + Lucide Icons
-- **Current Milestone:** Phase 1 Planned (Awaiting User Approval)
-- **Active Phase:** Phase 1 (MERN Stack Foundation & Database Layer)
+- **Theme:** Neighbourhood Skill Sharing
+- **Differentiating Feature:** Smart Skill Matching Engine ⭐ (Reciprocal exchange detection & explainable compatibility scoring)
+- **Tech Stack:** MERN Monorepo (MongoDB, Express.js, React.js with Vite, Node.js) + Tailwind CSS + Three.js + Framer Motion
+- **Current Milestone:** Phase 1 (MERN Foundation & Database Setup)
+- **Active Status:** Safe Directory Migration & Phase 1 Execution Preparation
 
-## Phase Progress
-- [ ] Phase 1: MERN Stack Foundation & Database Layer
-  - [ ] Plan 01-01: Express Server & React/Vite Client Setup with Tailwind & Base Layout (Wave 1)
-  - [ ] Plan 01-02: Mongoose Schemas, MongoDB Connection, Seeding Script & Live API Integration (Wave 2)
-- [ ] Phase 2: Authentication & User Profiles (MERN)
-- [ ] Phase 3: Skill Listings & Discovery Engine (MERN)
-- [ ] Phase 4: Exchange Workflow & Atomic Credit Ledger (MERN)
-- [ ] Phase 5: Reviews, Ratings & Final Polish (MERN)
+## 9-Phase Progress
+- [ ] **Phase 1: MERN Foundation & Database Setup** (Active)
+  - [ ] Plan 01-01: Directory Migration, Monorepo Scaffolding & Express Setup (Wave 1)
+  - [ ] Plan 01-02: 12 Mongoose Models & Comprehensive Database Seeding (Wave 2)
+  - [ ] Plan 01-03: Base Layout, Dynamic Landing Page & API Health Integration (Wave 3)
+- [ ] **Phase 2: Authentication & User Profiles**
+- [ ] **Phase 3: Skills, Offers & Learning Requests**
+- [ ] **Phase 4: Smart Skill Matching Engine ⭐**
+- [ ] **Phase 5: Availability Management & Session Booking**
+- [ ] **Phase 6: Time-Banking Credit System & Ledger**
+- [ ] **Phase 7: Communication & Community**
+- [ ] **Phase 8: Premium UI, 3D Visuals & Admin Dashboard**
+- [ ] **Phase 9: Testing, Security Audit & Deployment**
 
-## Decisions & Context
-- **2026-11-03:** Initialized project planning via `/gsd-new-project`.
-- **2026-11-03:** Architectural pivot to **MERN Stack** (MongoDB, Express.js, React.js with Vite, Node.js). Next.js, Prisma, and SQLite fully replaced.
-- Project structured as a clean dual workspace: `server/` (Node/Express API + Mongoose) and `client/` (React + Vite SPA).
-- Planning artifacts updated across `PROJECT.md`, `REQUIREMENTS.md`, `STACK.md`, `ARCHITECTURE.md`, `ROADMAP.md`, and Phase 1 plans.
+## Key Decisions & Log
+- **2026-11-03:** Initialized via `/gsd-new-project`.
+- **2026-11-03:** Architectural pivot to MERN stack approved by user.
+- **2026-11-03:** College requirements audit identified 17 critical gaps. Full audit document (`project-audit.md`) reviewed and approved by user.
+- **2026-11-03:** User formally approved synchronization of GSD planning artifacts, 9-phase roadmap, 12 Mongoose collections, and safe migration from `client/server` to `frontend/backend`.
 
-## Next Steps
-Awaiting user approval of revised MERN architecture and Phase 1 plans before initiating `/gsd-execute-phase 1`.
+## Next Step
+Complete safe file migration to `frontend/` and `backend/`, update configuration references, verify builds/linting, and execute Phase 1 plans.
