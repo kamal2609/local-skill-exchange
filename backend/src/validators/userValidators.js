@@ -37,3 +37,4 @@ const updateProfileSchema = z.object({
 module.exports = {
   updateProfileSchema,
 };
+

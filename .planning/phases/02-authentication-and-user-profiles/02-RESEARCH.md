@@ -38,3 +38,4 @@
   - Guards private routes (Profile, Edit Profile, Settings).
   - Redirects unauthenticated visitors to `/login` preserving intended destination via `location.state.from`.
   - Enforces role requirements if specified.
+

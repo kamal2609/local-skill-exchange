@@ -14,3 +14,4 @@ const generateToken = (id, role = 'LEARNER') => {
 };
 
 module.exports = generateToken;
+
