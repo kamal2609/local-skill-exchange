@@ -9,6 +9,7 @@ require('./models');
 
 const healthRoutes = require('./routes/health');
 const statsRoutes = require('./routes/stats');
+const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
@@ -68,14 +69,6 @@ app.use((req, res, next) => {
 });
 
 // Centralized Error Handler
-app.use((err, req, res, next) => {
-  console.error('Unhandled Server Error:', err);
-  const statusCode = err.statusCode || 500;
-  res.status(statusCode).json({
-    success: false,
-    message: err.message || 'Internal Server Error',
-    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
-  });
-});
+app.use(errorHandler);
 
 module.exports = app;
