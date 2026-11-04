@@ -9,6 +9,8 @@ require('./models');
 
 const healthRoutes = require('./routes/health');
 const statsRoutes = require('./routes/stats');
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -47,6 +49,8 @@ if (process.env.NODE_ENV !== 'test') {
 // Routes
 app.use('/api/health', healthRoutes);
 app.use('/api/stats', statsRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 
 // Root API discovery endpoint
 app.get('/api', (req, res) => {
@@ -56,6 +60,8 @@ app.get('/api', (req, res) => {
     endpoints: {
       health: '/api/health',
       stats: '/api/stats',
+      auth: '/api/auth',
+      users: '/api/users',
     },
   });
 });
