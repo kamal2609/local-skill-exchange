@@ -61,3 +61,4 @@ export const SkillNetworkHero: React.FC = () => {
 };
 
 export default SkillNetworkHero;
+

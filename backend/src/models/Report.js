@@ -45,3 +45,4 @@ reportSchema.index({ status: 1, createdAt: -1 });
 const Report = mongoose.model('Report', reportSchema);
 
 module.exports = Report;
+

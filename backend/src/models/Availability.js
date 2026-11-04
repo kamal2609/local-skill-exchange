@@ -54,3 +54,4 @@ availabilitySchema.index({ userId: 1, dayOfWeek: 1, startTime: 1 });
 const Availability = mongoose.model('Availability', availabilitySchema);
 
 module.exports = Availability;
+

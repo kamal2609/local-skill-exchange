@@ -5,3 +5,4 @@ const { getPlatformStats } = require('../controllers/statsController');
 router.get('/', getPlatformStats);
 
 module.exports = router;
+

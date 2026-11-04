@@ -67,3 +67,4 @@ skillOfferSchema.index({ providerId: 1, skillId: 1 }, { unique: true });
 const SkillOffer = mongoose.model('SkillOffer', skillOfferSchema);
 
 module.exports = SkillOffer;
+

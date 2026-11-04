@@ -47,3 +47,4 @@ creditTransactionSchema.index({ senderId: 1, createdAt: -1 });
 const CreditTransaction = mongoose.model('CreditTransaction', creditTransactionSchema);
 
 module.exports = CreditTransaction;
+

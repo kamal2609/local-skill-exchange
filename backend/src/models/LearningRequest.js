@@ -71,3 +71,4 @@ const learningRequestSchema = new mongoose.Schema(
 const LearningRequest = mongoose.model('LearningRequest', learningRequestSchema);
 
 module.exports = LearningRequest;
+

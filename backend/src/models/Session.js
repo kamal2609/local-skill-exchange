@@ -86,3 +86,4 @@ sessionSchema.index({ learnerId: 1, bookingDate: 1, startTime: 1 });
 const Session = mongoose.model('Session', sessionSchema);
 
 module.exports = Session;
+
