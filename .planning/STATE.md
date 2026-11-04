@@ -5,8 +5,8 @@
 - **Theme:** Neighbourhood Skill Sharing
 - **Differentiating Feature:** Smart Skill Matching Engine ⭐ (Reciprocal exchange detection & explainable compatibility scoring)
 - **Tech Stack:** MERN Monorepo (MongoDB, Express.js, React.js with Vite, Node.js) + Tailwind CSS + Three.js + Framer Motion
-- **Current Milestone:** Phase 2 (Authentication & User Profiles) — COMPLETED
-- **Next Milestone:** Phase 3 (Skills, Offers & Learning Requests)
+- **Current Milestone:** Phase 3 (Skills, Offers & Learning Requests) — READY FOR EXECUTION
+- **Next Milestone:** Phase 4 (Smart Skill Matching Engine ⭐)
 
 ## 9-Phase Progress
 - [x] **Phase 1: MERN Foundation & Database Setup** (Completed)
@@ -17,7 +17,10 @@
   - [x] Plan 02-01: Backend Authentication API & RBAC Middleware (Wave 1)
   - [x] Plan 02-02: User Profiles & Public Directory API (Wave 2)
   - [x] Plan 02-03: Frontend Auth State, Routes & UI Pages (Wave 3)
-- [ ] **Phase 3: Skills, Offers & Learning Requests**
+- [ ] **Phase 3: Skills, Offers & Learning Requests** (Planned)
+  - [ ] Plan 03-01: Skill Catalog Taxonomy API (Wave 1)
+  - [ ] Plan 03-02: Skill Offers & Learning Requests API (Wave 2)
+  - [ ] Plan 03-03: Frontend Discovery Catalog & Posting UI (Wave 3)
 - [ ] **Phase 4: Smart Skill Matching Engine ⭐**
 - [ ] **Phase 5: Availability Management & Session Booking**
 - [ ] **Phase 6: Time-Banking Credit System & Ledger**
