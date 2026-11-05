@@ -86,3 +86,4 @@ To guarantee atomic transfer even during network blips or concurrent actions:
   - Counterparty avatar, name, and skill reference.
   - Export CSV button for personal accounting.
 - **Navbar Integration:** Clicking the credits badge in the header navigates directly to `/ledger`.
+

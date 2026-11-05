@@ -17,6 +17,7 @@ import { OfferDetailPage } from './pages/OfferDetailPage';
 import { RequestDetailPage } from './pages/RequestDetailPage';
 import { MatchesPage } from './pages/MatchesPage';
 import { SessionsPage } from './pages/SessionsPage';
+import { LedgerPage } from './pages/LedgerPage';
 
 export const App: React.FC = () => {
   return (
@@ -75,6 +76,16 @@ export const App: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <SessionsPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Time-Banking Credit System & Ledger (Phase 6) */}
+              <Route
+                path="/ledger"
+                element={
+                  <ProtectedRoute>
+                    <LedgerPage />
                   </ProtectedRoute>
                 }
               />

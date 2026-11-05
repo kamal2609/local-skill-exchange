@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Session = require('../models/Session');
 const User = require('../models/User');
 const Skill = require('../models/Skill');
+const creditService = require('../services/creditService');
 
 /**
  * @desc    Create a new skill exchange session request
@@ -431,6 +432,13 @@ const confirmSession = async (req, res, next) => {
         User.findByIdAndUpdate(session.providerId, { $inc: { completedSessions: 1 } }),
         User.findByIdAndUpdate(session.learnerId, { $inc: { completedSessions: 1 } }),
       ]);
+
+      // Phase 6: Execute atomic double-entry credit transfer
+      try {
+        await creditService.transferSessionCredits(session._id);
+      } catch (transferErr) {
+        console.warn('Credit transfer notice upon session completion:', transferErr.message);
+      }
     }
 
     await session.save();

@@ -112,9 +112,9 @@ export const Navbar: React.FC = () => {
               <>
                 {/* Time Credit Badge (REQ-AUTH-06 & REQ-PROF-03) */}
                 <Link
-                  to="/profile"
+                  to="/ledger"
                   className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold shadow-sm hover:bg-emerald-100 transition-colors"
-                  title="Your Time Banking Balance: 1 hour taught = 1 credit earned"
+                  title="Your Time Banking Balance & Ledger: 1 hour taught = 1 credit earned"
                 >
                   <Clock className="w-3.5 h-3.5 text-emerald-600 animate-pulse" />
                   <span>{credits.toFixed(1)} Credits</span>
@@ -166,10 +166,14 @@ export const Navbar: React.FC = () => {
           {/* Mobile menu toggle */}
           <div className="md:hidden flex items-center gap-2">
             {isAuthenticated && user && (
-              <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
+              <Link
+                to="/ledger"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold"
+                title="View Time Credit Ledger"
+              >
                 <Clock className="w-3 h-3 text-emerald-600" />
                 <span>{credits.toFixed(1)} Cr</span>
-              </div>
+              </Link>
             )}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

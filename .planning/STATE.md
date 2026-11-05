@@ -5,8 +5,8 @@
 - **Theme:** Neighbourhood Skill Sharing
 - **Differentiating Feature:** Smart Skill Matching Engine ⭐ (Reciprocal exchange detection & explainable compatibility scoring)
 - **Tech Stack:** MERN Monorepo (MongoDB, Express.js, React.js with Vite, Node.js) + Tailwind CSS + Three.js + Framer Motion
-- **Current Milestone:** Phase 5 (Availability Management & Session Booking) — COMPLETED
-- **Next Milestone:** Phase 6 (Time-Banking Credit System & Ledger)
+- **Current Milestone:** Phase 6 (Time-Banking Credit System & Ledger) — COMPLETED
+- **Next Milestone:** Phase 7 (Communication & Community)
 
 ## 9-Phase Progress
 - [x] **Phase 1: MERN Foundation & Database Setup** (Completed)
@@ -29,28 +29,30 @@
   - [x] Plan 05-01: Availability Management API & Weekly Scheduler (Wave 1)
   - [x] Plan 05-02: Session Booking Engine & State Machine (Wave 2)
   - [x] Plan 05-03: Frontend Availability Scheduler & Sessions Dashboard UI (Wave 3)
-- [ ] **Phase 6: Time-Banking Credit System & Ledger**
+- [x] **Phase 6: Time-Banking Credit System & Ledger** (Completed)
+  - [x] Plan 06-01: Atomic Credit Ledger Service & Double-Entry Accounting (Wave 1)
+  - [x] Plan 06-02: Credit REST API & Session Completion Automation (Wave 2)
+  - [x] Plan 06-03: Time-Banking Ledger UI & Navbar Integration (Wave 3)
 - [ ] **Phase 7: Communication & Community**
 - [ ] **Phase 8: Premium UI, 3D Visuals & Admin Dashboard**
 - [ ] **Phase 9: Testing, Security Audit & Deployment**
 
 ## Verification Log & Status
-- **Phase 5 Availability & Booking API:** Verified with 30 automated unit and integration tests (`backend/test/phase5Verification.js`):
-  - `singleSlotSchema` and `bulkAvailabilitySchema` validate weekday constraints ($0-6$), format ($HH:mm$), and enforce `startTime < endTime`.
-  - `PUT /api/availability/my`: Atomic bulk replacement of weekly slots.
-  - `GET /api/availability/user/:userId`: Public schedule query for candidate booking calendar.
-  - `POST /api/sessions`: Self-booking guard, duration credit valuation ($\text{duration} / 60$), solvency validation, and double-booking conflict detection.
-  - `PUT /api/sessions/:id/status`: Provider accept/decline state transitions (`REQUESTED` $\rightarrow$ `SCHEDULED` / `REJECTED`).
-  - `POST /api/sessions/:id/confirm`: Dual/learner confirmation flow marking session as `COMPLETED`.
-- **Phase 5 Frontend Components & Pages:**
-  - `AvailabilityScheduler.tsx`: Interactive 7-day schedule grid with per-day time slots, format selectors, and bulk save.
-  - `BookingModal.tsx`: Real-time credit calculation preview, provider availability slot selector, custom meeting link, and mutual reciprocal swap indicator.
-  - `SessionsPage.tsx` (`/sessions`): Tabbed management ("Upcoming & Scheduled", "Pending Requests", "Completed History", "Cancelled"), collapsible availability scheduler, one-click accept/decline and completion confirmation.
-  - Connected booking CTAs from `MatchesPage.tsx` and `OfferDetailPage.tsx`.
-  - `Navbar.tsx`: Added "Sessions" nav link in desktop and mobile menus.
-  - `App.tsx`: Mounted `/sessions` route guarded by `<ProtectedRoute>`.
-- **Frontend Production Build:** Verified (`tsc -b && vite build`) built in 16.82s with zero TypeScript or bundling errors.
+- **Phase 6 Time-Banking Credit System & Ledger:** Verified with 23 automated tests (`backend/test/phase6Verification.js`):
+  - Universal Time-Banking rule: 1 Hour = 1 Credit ($1.00$).
+  - Atomic double-entry transfer with non-negative balance enforcement ($\text{creditsBalance} \ge 0$).
+  - Prevents duplicate awards for the same session.
+  - Reciprocal swap handler: Records barter transactions with 0 net credit change.
+  - `GET /api/credits/balance`: Returns balance, lifetime earned, lifetime spent, and session count.
+  - `GET /api/credits/ledger`: Paginated transaction history with type filtering (`ALL`, `EARNED`, `SPENT`, `BONUS`).
+  - `POST /api/credits/admin-adjust`: Admin-only adjustment with mandatory audit reason.
+  - Integrated with session completion: confirming a session automatically executes atomic credit transfer.
+- **Phase 6 Frontend Ledger UI & Navigation:**
+  - `LedgerPage.tsx` (`/ledger`): Economics explainer hero, current balance card, lifetime metrics, filterable transaction table, and one-click CSV export.
+  - `Navbar.tsx`: Desktop and mobile time-banking credit badges link directly to `/ledger`.
+  - `App.tsx`: Mounted `/ledger` protected route.
+- **Frontend Production Build:** Verified (`tsc -b && vite build`) built in 27.91s with zero TypeScript or bundling errors.
 - **Database Connection:** Verified MongoDB Atlas connection is functioning.
 
 ## Next Step
-Run `/gsd-plan-phase 6` to plan Phase 6 (Time-Banking Credit System & Ledger).
+Run `/gsd-plan-phase 7` to plan Phase 7 (Communication & Community).
