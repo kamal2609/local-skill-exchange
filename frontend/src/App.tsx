@@ -15,6 +15,7 @@ import { ExplorePage } from './pages/ExplorePage';
 import { PostPage } from './pages/PostPage';
 import { OfferDetailPage } from './pages/OfferDetailPage';
 import { RequestDetailPage } from './pages/RequestDetailPage';
+import { MatchesPage } from './pages/MatchesPage';
 
 export const App: React.FC = () => {
   return (
@@ -56,6 +57,16 @@ export const App: React.FC = () => {
               />
               <Route path="/offers/:id" element={<OfferDetailPage />} />
               <Route path="/requests/:id" element={<RequestDetailPage />} />
+
+              {/* Smart Skill Matching Engine (Phase 4 ⭐) */}
+              <Route
+                path="/matches"
+                element={
+                  <ProtectedRoute>
+                    <MatchesPage />
+                  </ProtectedRoute>
+                }
+              />
 
               {/* 404 Fallback */}
               <Route

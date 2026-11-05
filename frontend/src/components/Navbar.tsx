@@ -74,6 +74,22 @@ export const Navbar: React.FC = () => {
               <PlusCircle className="w-4 h-4" />
               Post a Skill
             </Link>
+            {isAuthenticated && (
+              <Link
+                to="/matches"
+                className={`px-3.5 py-2 rounded-lg transition-colors flex items-center gap-1.5 ${
+                  isActive('/matches')
+                    ? 'bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200'
+                    : 'text-emerald-700 hover:text-emerald-800 hover:bg-emerald-50/60 font-medium'
+                }`}
+              >
+                <Sparkles className="w-4 h-4 text-emerald-600 animate-pulse" />
+                <span>Smart Matches</span>
+                <span className="text-[10px] bg-emerald-600 text-white font-bold px-1.5 py-0.2 rounded-full">
+                  ⭐
+                </span>
+              </Link>
+            )}
           </nav>
 
           {/* Right Actions */}
@@ -176,6 +192,21 @@ export const Navbar: React.FC = () => {
           >
             Post a Skill
           </Link>
+          {isAuthenticated && (
+            <Link
+              to="/matches"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-between px-3 py-2 rounded-md text-base font-semibold text-emerald-700 bg-emerald-50/70 hover:bg-emerald-100"
+            >
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-emerald-600" />
+                <span>Smart Matches</span>
+              </div>
+              <span className="text-xs bg-emerald-600 text-white font-bold px-2 py-0.5 rounded-full">
+                ⭐ Matching
+              </span>
+            </Link>
+          )}
 
           <div className="pt-3 border-t border-slate-100">
             {isAuthenticated && user ? (

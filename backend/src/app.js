@@ -14,6 +14,7 @@ const userRoutes = require('./routes/users');
 const skillRoutes = require('./routes/skills');
 const offerRoutes = require('./routes/offers');
 const requestRoutes = require('./routes/requests');
+const matchRoutes = require('./routes/matches');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -57,6 +58,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/skills', skillRoutes);
 app.use('/api/offers', offerRoutes);
 app.use('/api/requests', requestRoutes);
+app.use('/api/matches', matchRoutes);
 
 // Root API discovery endpoint
 app.get('/api', (req, res) => {
@@ -71,6 +73,7 @@ app.get('/api', (req, res) => {
       skills: '/api/skills',
       offers: '/api/offers',
       requests: '/api/requests',
+      matches: '/api/matches',
     },
   });
 });
