@@ -74,3 +74,4 @@ Administrators have access to the **Command Center (`/admin`)**:
 
 ### Tab 5: Credit Controls
 - Perform audited manual credit transfers (`ADMIN_ADJUSTMENT`) with a mandatory written justification.
+

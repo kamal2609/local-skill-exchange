@@ -235,3 +235,4 @@ Admin desk for report review and status resolution.
 - `GET /api/admin/reports`: Filtered list of safety reports.
 - `PUT /api/admin/reports/:id`: Resolves/dismisses reports with admin audit notes.
 - `POST /api/admin/categories`: Registers new skill taxonomy item.
+

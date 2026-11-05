@@ -149,3 +149,4 @@ Community trust & safety reports.
 - `description` (String, required, maxlength: 1000).
 - `status` (String, enum: `PENDING`, `REVIEWED`, `RESOLVED`, `DISMISSED`, default: `PENDING`).
 - `adminNotes` (String, optional).
+

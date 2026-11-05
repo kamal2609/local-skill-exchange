@@ -100,3 +100,4 @@ All balance modifications are executed through `backend/src/services/creditServi
 - **Framer Motion Micro-Interactions (`PageTransition.tsx`):**
   - Route transitions with spring physics.
   - Staggered entrances for list items and cards.
+

@@ -212,3 +212,4 @@ For in-depth technical details, consult the specialized documentation in the [`d
 
 ## 📄 License
 MIT © 2026 Local Skill Exchange. Built for community empowerment and lifelong learning.
+
