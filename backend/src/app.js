@@ -18,6 +18,10 @@ const matchRoutes = require('./routes/matches');
 const availabilityRoutes = require('./routes/availability');
 const sessionRoutes = require('./routes/sessions');
 const creditRoutes = require('./routes/credits');
+const conversationRoutes = require('./routes/conversations');
+const notificationRoutes = require('./routes/notifications');
+const reviewRoutes = require('./routes/reviews');
+const reportRoutes = require('./routes/reports');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -65,6 +69,10 @@ app.use('/api/matches', matchRoutes);
 app.use('/api/availability', availabilityRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/credits', creditRoutes);
+app.use('/api/conversations', conversationRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/reports', reportRoutes);
 
 // Root API discovery endpoint
 app.get('/api', (req, res) => {
@@ -83,6 +91,10 @@ app.get('/api', (req, res) => {
       availability: '/api/availability',
       sessions: '/api/sessions',
       credits: '/api/credits',
+      conversations: '/api/conversations',
+      notifications: '/api/notifications',
+      reviews: '/api/reviews',
+      reports: '/api/reports',
     },
   });
 });

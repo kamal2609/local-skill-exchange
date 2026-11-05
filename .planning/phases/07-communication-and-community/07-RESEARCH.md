@@ -64,3 +64,4 @@ Effective peer learning relies on trust, seamless communication, and accountabil
 - `NotificationBell`: In-header notification drawer displaying recent alerts with unread count.
 - `ReviewModal`: Interactive 5-star rating modal with written feedback textarea.
 - `ReportModal`: Discreet safety modal to flag misconduct.
+

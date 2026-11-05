@@ -18,6 +18,7 @@ import { RequestDetailPage } from './pages/RequestDetailPage';
 import { MatchesPage } from './pages/MatchesPage';
 import { SessionsPage } from './pages/SessionsPage';
 import { LedgerPage } from './pages/LedgerPage';
+import { MessagesPage } from './pages/MessagesPage';
 
 export const App: React.FC = () => {
   return (
@@ -86,6 +87,16 @@ export const App: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <LedgerPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Communication & Messaging (Phase 7) */}
+              <Route
+                path="/messages"
+                element={
+                  <ProtectedRoute>
+                    <MessagesPage />
                   </ProtectedRoute>
                 }
               />
