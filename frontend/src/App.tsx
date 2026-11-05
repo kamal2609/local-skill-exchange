@@ -11,6 +11,10 @@ import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { PublicProfilePage } from './pages/PublicProfilePage';
+import { ExplorePage } from './pages/ExplorePage';
+import { PostPage } from './pages/PostPage';
+import { OfferDetailPage } from './pages/OfferDetailPage';
+import { RequestDetailPage } from './pages/RequestDetailPage';
 
 export const App: React.FC = () => {
   return (
@@ -40,29 +44,26 @@ export const App: React.FC = () => {
               />
               <Route path="/users/:id" element={<PublicProfilePage />} />
 
-              {/* Future Phase 3 & 4 routes placeholders */}
-              <Route
-                path="/explore"
-                element={
-                  <div className="max-w-7xl mx-auto px-4 py-16 text-center space-y-4">
-                    <h2 className="text-2xl font-bold text-slate-900">Explore Catalog</h2>
-                    <p className="text-sm text-slate-600">
-                      The full interactive catalog with filters arrives in Phase 3.
-                    </p>
-                    <Link to="/" className="inline-block text-emerald-700 font-semibold hover:underline text-sm">
-                      ← Return to Home
-                    </Link>
-                  </div>
-                }
-              />
+              {/* Skill Catalog & Offers/Requests Discovery (Phase 3) */}
+              <Route path="/explore" element={<ExplorePage />} />
               <Route
                 path="/post"
                 element={
-                  <div className="max-w-7xl mx-auto px-4 py-16 text-center space-y-4">
-                    <h2 className="text-2xl font-bold text-slate-900">Post a Skill</h2>
-                    <p className="text-sm text-slate-600">
-                      Skill listing form with validation arrives in Phase 3.
-                    </p>
+                  <ProtectedRoute>
+                    <PostPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/offers/:id" element={<OfferDetailPage />} />
+              <Route path="/requests/:id" element={<RequestDetailPage />} />
+
+              {/* 404 Fallback */}
+              <Route
+                path="*"
+                element={
+                  <div className="max-w-md mx-auto px-4 py-24 text-center space-y-4">
+                    <h2 className="text-3xl font-extrabold text-slate-900">Page Not Found</h2>
+                    <p className="text-sm text-slate-600">The page you're looking for does not exist.</p>
                     <Link to="/" className="inline-block text-emerald-700 font-semibold hover:underline text-sm">
                       ← Return to Home
                     </Link>

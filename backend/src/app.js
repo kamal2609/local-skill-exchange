@@ -11,6 +11,9 @@ const healthRoutes = require('./routes/health');
 const statsRoutes = require('./routes/stats');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
+const skillRoutes = require('./routes/skills');
+const offerRoutes = require('./routes/offers');
+const requestRoutes = require('./routes/requests');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -51,6 +54,9 @@ app.use('/api/health', healthRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/skills', skillRoutes);
+app.use('/api/offers', offerRoutes);
+app.use('/api/requests', requestRoutes);
 
 // Root API discovery endpoint
 app.get('/api', (req, res) => {
@@ -62,6 +68,9 @@ app.get('/api', (req, res) => {
       stats: '/api/stats',
       auth: '/api/auth',
       users: '/api/users',
+      skills: '/api/skills',
+      offers: '/api/offers',
+      requests: '/api/requests',
     },
   });
 });
