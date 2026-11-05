@@ -71,3 +71,4 @@ In a Time-Banking skill exchange, scheduling is the critical bridge connecting a
    - One-click actions: "Accept", "Decline", "Join Meeting", "Mark Completed".
 4. **Navbar Integration:**
    - "Sessions" navigation link with dynamic counter for pending requests.
+

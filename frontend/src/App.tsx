@@ -16,6 +16,7 @@ import { PostPage } from './pages/PostPage';
 import { OfferDetailPage } from './pages/OfferDetailPage';
 import { RequestDetailPage } from './pages/RequestDetailPage';
 import { MatchesPage } from './pages/MatchesPage';
+import { SessionsPage } from './pages/SessionsPage';
 
 export const App: React.FC = () => {
   return (
@@ -64,6 +65,16 @@ export const App: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <MatchesPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Availability Management & Session Booking (Phase 5) */}
+              <Route
+                path="/sessions"
+                element={
+                  <ProtectedRoute>
+                    <SessionsPage />
                   </ProtectedRoute>
                 }
               />

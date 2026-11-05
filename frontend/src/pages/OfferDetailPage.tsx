@@ -14,6 +14,7 @@ import {
   Languages,
 } from 'lucide-react';
 import api from '../services/api';
+import { BookingModal } from '../components/sessions/BookingModal';
 
 interface SkillDetail {
   _id: string;
@@ -56,6 +57,7 @@ export const OfferDetailPage: React.FC = () => {
   const [offer, setOffer] = useState<OfferData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   useEffect(() => {
     const fetchOffer = async () => {
@@ -280,15 +282,30 @@ export const OfferDetailPage: React.FC = () => {
 
                 <button
                   type="button"
+                  onClick={() => setBookingOpen(true)}
                   className="w-full py-2.5 px-3 rounded-xl bg-emerald-600 text-white font-semibold text-xs shadow-sm hover:bg-emerald-700 transition-colors flex items-center justify-center gap-1.5"
                 >
                   <Calendar className="w-4 h-4" />
-                  <span>Request Session (Phase 5 Booking)</span>
+                  <span>Request Session Booking</span>
                 </button>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Phase 5 Interactive Booking Modal */}
+        {bookingOpen && offer.providerId && offer.skillId && (
+          <BookingModal
+            isOpen={true}
+            onClose={() => setBookingOpen(false)}
+            onSuccess={() => {
+              alert('🎉 Session request submitted! You can track status on your Sessions page.');
+            }}
+            provider={offer.providerId}
+            skill={offer.skillId}
+            skillOfferId={offer._id}
+          />
+        )}
       </div>
     </div>
   );

@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { BookingModal } from '../components/sessions/BookingModal';
 
 interface ScoreBreakdown {
   skill: number;
@@ -64,6 +65,11 @@ export const MatchesPage: React.FC = () => {
   const [reciprocalOnly, setReciprocalOnly] = useState(false);
   const [minScore, setMinScore] = useState(20);
   const [activePartnerDetail, setActivePartnerDetail] = useState<MatchItem | null>(null);
+  const [bookingTarget, setBookingTarget] = useState<{
+    partner: MatchingPartner;
+    skill: { _id: string; name: string };
+    isReciprocal: boolean;
+  } | null>(null);
 
   const fetchMatches = async () => {
     try {
@@ -502,13 +508,12 @@ export const MatchesPage: React.FC = () => {
 
                     <button
                       onClick={() => {
-                        alert(
-                          `Requesting exchange with ${item.partner.name}!\n\n${
-                            item.isReciprocal
-                              ? '⭐ Reciprocal Match: 0 net credits will be deducted for mutual swap.'
-                              : 'Standard exchange: 1 credit per 1 hour session.'
-                          }\n\n(Session booking flow activates in Phase 5)`
-                        );
+                        const skillName = item.matchingSkills.theyTeachYou[0] || 'Skill Exchange';
+                        setBookingTarget({
+                          partner: item.partner,
+                          skill: { _id: item.partner._id, name: skillName },
+                          isReciprocal: item.isReciprocal,
+                        });
                       }}
                       className={`flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-xs font-bold text-white shadow-sm transition-all hover:scale-[1.02] ${
                         item.isReciprocal
@@ -524,6 +529,20 @@ export const MatchesPage: React.FC = () => {
               );
             })}
           </div>
+        )}
+
+        {/* Phase 5 Interactive Booking Modal */}
+        {bookingTarget && (
+          <BookingModal
+            isOpen={true}
+            onClose={() => setBookingTarget(null)}
+            onSuccess={() => {
+              alert('🎉 Session requested! You can view and manage it on your Sessions page.');
+            }}
+            provider={bookingTarget.partner}
+            skill={bookingTarget.skill}
+            isReciprocal={bookingTarget.isReciprocal}
+          />
         )}
       </div>
     </div>
