@@ -111,3 +111,4 @@ export const SafetyGuidelinesPage: React.FC = () => {
 };
 
 export default SafetyGuidelinesPage;
+

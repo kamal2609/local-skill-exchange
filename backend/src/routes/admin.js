@@ -41,3 +41,4 @@ router.put('/reports/:id', validate(resolveReportSchema), resolveReport);
 router.post('/categories', validate(createCategorySchema), createSkillCategory);
 
 module.exports = router;
+
