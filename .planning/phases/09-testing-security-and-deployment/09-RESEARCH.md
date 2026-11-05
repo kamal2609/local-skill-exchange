@@ -121,3 +121,4 @@ function sanitize(payload) {
   - `README.md` and 5 specialized docs in `docs/`.
   - `vercel.json` and `render.yaml` deployment configs.
   - Final verification across monorepo builds and tests.
+
