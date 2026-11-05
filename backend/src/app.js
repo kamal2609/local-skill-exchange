@@ -22,6 +22,7 @@ const conversationRoutes = require('./routes/conversations');
 const notificationRoutes = require('./routes/notifications');
 const reviewRoutes = require('./routes/reviews');
 const reportRoutes = require('./routes/reports');
+const adminRoutes = require('./routes/admin');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -73,6 +74,7 @@ app.use('/api/conversations', conversationRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Root API discovery endpoint
 app.get('/api', (req, res) => {
@@ -95,6 +97,7 @@ app.get('/api', (req, res) => {
       notifications: '/api/notifications',
       reviews: '/api/reviews',
       reports: '/api/reports',
+      admin: '/api/admin',
     },
   });
 });

@@ -121,3 +121,4 @@ The Three.js canvas in `SkillNetworkHero.tsx` renders a dynamic 3D graph:
   - `npm run build --prefix frontend` builds with zero errors.
   - Verify all 20 routes resolve cleanly without 404.
   - Verify 3D canvas loads with fallback and responsiveness.
+

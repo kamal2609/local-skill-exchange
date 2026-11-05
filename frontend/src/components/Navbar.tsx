@@ -12,6 +12,7 @@ import {
   Sparkles,
   Calendar,
   MessageSquare,
+  ShieldAlert,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import NotificationBell from './notifications/NotificationBell';
@@ -117,6 +118,19 @@ export const Navbar: React.FC = () => {
               >
                 <MessageSquare className="w-4 h-4" />
                 <span>Messages</span>
+              </Link>
+            )}
+            {isAuthenticated && user?.role === 'ADMIN' && (
+              <Link
+                to="/admin"
+                className={`px-3.5 py-2 rounded-lg transition-colors flex items-center gap-1.5 ${
+                  isActive('/admin')
+                    ? 'bg-red-50 text-red-700 font-bold border border-red-200'
+                    : 'text-red-600 hover:text-red-700 hover:bg-red-50 font-semibold'
+                }`}
+              >
+                <ShieldAlert className="w-4 h-4 text-red-500" />
+                <span>Admin</span>
               </Link>
             )}
           </nav>
@@ -267,6 +281,18 @@ export const Navbar: React.FC = () => {
               <div className="flex items-center gap-2">
                 <MessageSquare className="w-4 h-4 text-emerald-600" />
                 <span>Messages</span>
+              </div>
+            </Link>
+          )}
+          {isAuthenticated && user?.role === 'ADMIN' && (
+            <Link
+              to="/admin"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-between px-3 py-2 rounded-md text-base font-bold text-red-600 bg-red-50 hover:bg-red-100"
+            >
+              <div className="flex items-center gap-2">
+                <ShieldAlert className="w-4 h-4 text-red-500" />
+                <span>Admin Center</span>
               </div>
             </Link>
           )}

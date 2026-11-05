@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/shared/ProtectedRoute';
+import { AdminRoute } from './components/shared/AdminRoute';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { HomePage } from './pages/HomePage';
@@ -19,6 +20,11 @@ import { MatchesPage } from './pages/MatchesPage';
 import { SessionsPage } from './pages/SessionsPage';
 import { LedgerPage } from './pages/LedgerPage';
 import { MessagesPage } from './pages/MessagesPage';
+import { AdminDashboardPage } from './pages/AdminDashboardPage';
+import { AboutPage } from './pages/AboutPage';
+import { HowItWorksPage } from './pages/HowItWorksPage';
+import { SafetyGuidelinesPage } from './pages/SafetyGuidelinesPage';
+import { CommunityPage } from './pages/CommunityPage';
 
 export const App: React.FC = () => {
   return (
@@ -98,6 +104,22 @@ export const App: React.FC = () => {
                   <ProtectedRoute>
                     <MessagesPage />
                   </ProtectedRoute>
+                }
+              />
+
+              {/* Informational & Community Pages (Phase 8) */}
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/how-it-works" element={<HowItWorksPage />} />
+              <Route path="/safety" element={<SafetyGuidelinesPage />} />
+              <Route path="/community" element={<CommunityPage />} />
+
+              {/* Administrator Command Center (Phase 8) */}
+              <Route
+                path="/admin"
+                element={
+                  <AdminRoute>
+                    <AdminDashboardPage />
+                  </AdminRoute>
                 }
               />
 
