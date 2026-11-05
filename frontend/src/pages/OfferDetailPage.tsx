@@ -293,3 +293,4 @@ export const OfferDetailPage: React.FC = () => {
     </div>
   );
 };
+

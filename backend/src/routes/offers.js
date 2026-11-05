@@ -25,3 +25,4 @@ router.put('/:id', protect, validate(updateOfferSchema), updateOffer);
 router.delete('/:id', protect, deleteOffer);
 
 module.exports = router;
+

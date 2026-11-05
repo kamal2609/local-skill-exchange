@@ -264,3 +264,4 @@ export const RequestDetailPage: React.FC = () => {
     </div>
   );
 };
+

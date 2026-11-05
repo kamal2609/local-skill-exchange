@@ -19,3 +19,4 @@ router.get('/:id', getSkillById);
 router.post('/', protect, validate(createSkillSchema), createSkill);
 
 module.exports = router;
+
