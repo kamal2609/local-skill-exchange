@@ -70,3 +70,4 @@ The engine does not output black-box numbers. For every recommendation, it const
 - `GET /api/matches`: Returns all ranked compatible partners for the logged-in user with total score, component breakdown, and explanations.
 - `GET /api/matches/reciprocal`: Returns only reciprocal matches ($S_{\text{reciprocal}} > 0$).
 - `GET /api/matches/:partnerId`: Detailed pairwise compatibility breakdown between the logged-in user and any specific user.
+
